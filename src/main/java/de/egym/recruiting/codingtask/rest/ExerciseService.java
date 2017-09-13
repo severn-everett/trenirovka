@@ -13,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
 import io.swagger.annotations.Api;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 
 @Path("/api/v1/exercise")
 @Api(value = "Exercise Service")
@@ -30,7 +32,22 @@ public interface ExerciseService {
 	@Nonnull
 	@Produces(MediaType.APPLICATION_JSON)
 	Exercise getExerciseById(@Nonnull @PathParam("exerciseId") Long exerciseId);
-
+        
+        @POST
+        @Path("/{exerciseId}")
+        @Nonnull
+        @Produces(MediaType.APPLICATION_JSON)
+        Exercise updateExercise(
+            @Nonnull @PathParam("exerciseId") Long exerciseId,
+            @Nonnull @QueryParam("userId") Long userId,
+            @Nonnull @QueryParam("description") String description,
+            @Nonnull @QueryParam("type") String type,
+            @Nonnull @QueryParam("startTime") String startTime,
+            @Nonnull @QueryParam("duration") Integer duration,
+            @Nonnull @QueryParam("distance") Integer distance,
+            @Nonnull @QueryParam("calories") Integer calories
+        );
+        
 	/**
 	 * Get the exercises with the given description.
 	 *
@@ -43,4 +60,18 @@ public interface ExerciseService {
 	@Nonnull
 	@Produces(MediaType.APPLICATION_JSON)
 	List<Exercise> getExerciseByDescription(@Nullable @QueryParam("description") String description);
+        
+        @PUT
+        @Path("/create")
+        @Nonnull
+        @Produces(MediaType.APPLICATION_JSON)
+        Exercise createExercise(
+            @Nonnull @QueryParam("userId") Long userId,
+            @Nonnull @QueryParam("description") String description,
+            @Nonnull @QueryParam("type") String type,
+            @Nonnull @QueryParam("startTime") String startTime,
+            @Nonnull @QueryParam("duration") Integer duration,
+            @Nonnull @QueryParam("distance") Integer distance,
+            @Nonnull @QueryParam("calories") Integer calories
+        );
 }

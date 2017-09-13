@@ -1,13 +1,17 @@
 package de.egym.recruiting.codingtask.jpa.domain;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import org.apache.commons.lang3.time.DateUtils;
 
 @Entity
 public class Exercise extends AbstractEntity {
+    
+        private static final String TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
 	private static final long serialVersionUID = 1L;
 
@@ -93,4 +97,8 @@ public class Exercise extends AbstractEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+        
+        public static Date parseDate (String dateTimeStr) throws ParseException {
+            return DateUtils.parseDate(dateTimeStr, TIME_PATTERN);
+        }
 }

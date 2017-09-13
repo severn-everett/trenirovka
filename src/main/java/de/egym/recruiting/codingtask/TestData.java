@@ -3,7 +3,6 @@ package de.egym.recruiting.codingtask;
 import java.text.ParseException;
 import java.util.TimeZone;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +17,6 @@ import de.egym.recruiting.codingtask.jpa.domain.Exercise;
 public class TestData {
 
 	private static final Logger log = LoggerFactory.getLogger(TestData.class);
-
-	private static final String TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
 	private final ExerciseDao exerciseDao;
 
@@ -49,7 +46,7 @@ public class TestData {
 		exercise11.setCalories(220);
 		exercise11.setUserId(userId1);
 		try {
-			exercise11.setStartTime(DateUtils.parseDate("2016-06-02T14:23:35", TIME_PATTERN));
+			exercise11.setStartTime(Exercise.parseDate("2016-06-02T14:23:35"));
 		} catch (ParseException e) {
 			// ignoring
 		}
@@ -63,7 +60,7 @@ public class TestData {
 		exercise12.setDistance(280000);
 		exercise12.setUserId(userId1);
 		try {
-			exercise12.setStartTime(DateUtils.parseDate("2016-06-17T16:33:45", TIME_PATTERN));
+			exercise12.setStartTime(Exercise.parseDate("2016-06-17T16:33:45"));
 		} catch (ParseException e) {
 			// ignoring
 		}
@@ -79,7 +76,7 @@ public class TestData {
 		exercise21.setDistance(92000);
 		exercise21.setUserId(userId2);
 		try {
-			exercise21.setStartTime(DateUtils.parseDate("2016-05-12T19:13:07", TIME_PATTERN));
+			exercise21.setStartTime(Exercise.parseDate("2016-05-12T19:13:07"));
 		} catch (ParseException e) {
 			// ignoring
 		}
