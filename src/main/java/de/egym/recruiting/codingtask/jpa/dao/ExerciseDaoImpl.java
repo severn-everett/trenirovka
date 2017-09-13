@@ -101,14 +101,18 @@ public class ExerciseDaoImpl extends AbstractBaseDao<Exercise>implements Exercis
     public List<Exercise> findForLastMonth(List<Long> userIds) {
         Date now = new Date();
         Date monthAgo = DateUtils.addWeeks(now, -4);
-        try {
-            return getEntityManager()
-                    .createQuery("SELECT e FROM Exercise e WHERE e.userId IN :userIds AND e.startTime BETWEEN :startTime AND :endTime ORDER BY e.startTime")
-                    .setParameter("userIds", userIds)
-                    .setParameter("startTime", monthAgo)
-                    .setParameter("endTime", now)
-                    .getResultList();
-        } catch (NoResultException e) {
+        if (!userIds.isEmpty()) {
+            try {
+                return getEntityManager()
+                        .createQuery("SELECT e FROM Exercise e WHERE e.userId IN :userIds AND e.startTime BETWEEN :startTime AND :endTime ORDER BY e.startTime")
+                        .setParameter("userIds", userIds)
+                        .setParameter("startTime", monthAgo)
+                        .setParameter("endTime", now)
+                        .getResultList();
+            } catch (NoResultException e) {
+                return Collections.emptyList();
+            }
+        } else {
             return Collections.emptyList();
         }
     }

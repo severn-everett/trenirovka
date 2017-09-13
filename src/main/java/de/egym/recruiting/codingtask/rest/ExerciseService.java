@@ -61,11 +61,19 @@ public interface ExerciseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	List<Exercise> getExerciseByDescription(@Nullable @QueryParam("description") String description);
         
+        @PUT
+        @Path("/")
+        @Nonnull
+        @Produces(MediaType.APPLICATION_JSON)
+        Exercise createExercise(
+            @Nonnull Exercise exercise 
+            ) throws AlreadyExistsException;
+        
         @GET
-        @Path("/users/viewuser/{userId}")
+        @Path("/users/viewexercises")
         @Produces(MediaType.APPLICATION_JSON)
         List<Exercise> getExercisesByUser (
-                @Nonnull @PathParam("userId") Long userId, 
+                @Nonnull @QueryParam("userId") Long userId, 
                 @Nullable @QueryParam("type") Enums.ExerciseType type,
                 @Nullable @QueryParam("date") String date) throws ParseException;
         
@@ -73,12 +81,4 @@ public interface ExerciseService {
         @Path("/users/getrankings")
         @Produces(MediaType.APPLICATION_JSON)
         List<Long> getUserRankings(@Nonnull @QueryParam("userIds") List<Long> userIds);
-        
-        @PUT
-        @Path("/create")
-        @Nonnull
-        @Produces(MediaType.APPLICATION_JSON)
-        Exercise createExercise(
-            @Nonnull Exercise exercise 
-            ) throws AlreadyExistsException;
 }
