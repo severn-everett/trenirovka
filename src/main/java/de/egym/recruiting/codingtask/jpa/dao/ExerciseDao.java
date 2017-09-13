@@ -25,4 +25,7 @@ public interface ExerciseDao extends BaseDao<Exercise> {
         
         @Nullable
         Exercise findByUserIdAndTimeRange(@Nonnull Long userId, @Nonnull Date startTime, @Nonnull Date endTime);
+        
+        @Nonnull
+        List<Exercise> findForLastMonth();
 }

@@ -15,6 +15,7 @@ import de.egym.recruiting.codingtask.exceptions.AlreadyExistsException;
 import de.egym.recruiting.codingtask.jpa.dao.ExerciseDao;
 import de.egym.recruiting.codingtask.jpa.domain.Enums;
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
+import de.egym.recruiting.codingtask.sort.SortingService;
 import java.text.ParseException;
 import java.util.stream.Collectors;
 import javax.validation.Validation;
@@ -27,11 +28,14 @@ public class ExerciseServiceImpl implements ExerciseService {
     
     private final ExerciseDao exerciseDao;
     
+    private final SortingService sortingService;
+    
     private final Validator validator;
 
     @Inject
-    ExerciseServiceImpl(final ExerciseDao exerciseDao) {
+    ExerciseServiceImpl(final ExerciseDao exerciseDao, final SortingService sortingService) {
         this.exerciseDao = exerciseDao;
+        this.sortingService = sortingService;
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
@@ -104,6 +108,11 @@ public class ExerciseServiceImpl implements ExerciseService {
         final String endTime) {
         log.debug("Get exercises by user, type, and dates");
         return exerciseDao.findByUserAndTypeAndDates(userId, type, startTime, endTime);
+    }
+    
+    @Override
+    public List<Long> getUserRankings() {
+        return sortingService.sortUsersByActivity(exerciseDao.findForLastMonth());
     }
     
     @Nonnull

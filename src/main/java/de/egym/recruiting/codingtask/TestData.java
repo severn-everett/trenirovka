@@ -47,7 +47,7 @@ public class TestData {
                 exercise11.setDistance(50000);
 		exercise11.setUserId(userId1);
 		try {
-			exercise11.setStartTime(Exercise.parseDate("2016-06-02T14:23:35"));
+			exercise11.setStartTime(Exercise.parseDate("2017-09-02T14:23:35"));
 		} catch (ParseException e) {
 			// ignoring
 		}
@@ -61,7 +61,7 @@ public class TestData {
 		exercise12.setDistance(280000);
 		exercise12.setUserId(userId1);
 		try {
-			exercise12.setStartTime(Exercise.parseDate("2016-06-17T16:33:45"));
+			exercise12.setStartTime(Exercise.parseDate("2017-09-11T16:33:45"));
 		} catch (ParseException e) {
 			// ignoring
 		}
@@ -77,7 +77,7 @@ public class TestData {
 		exercise21.setDistance(92000);
 		exercise21.setUserId(userId2);
 		try {
-			exercise21.setStartTime(Exercise.parseDate("2016-05-12T19:13:07"));
+			exercise21.setStartTime(Exercise.parseDate("2017-09-12T19:13:07"));
 		} catch (ParseException e) {
 			// ignoring
 		}

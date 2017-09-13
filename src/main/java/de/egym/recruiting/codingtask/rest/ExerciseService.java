@@ -69,13 +69,18 @@ public interface ExerciseService {
 	List<Exercise> getExerciseByDescription(@Nullable @QueryParam("description") String description);
         
         @GET
-        @Path("/users/{userId}")
+        @Path("/users/viewuser/{userId}")
         @Produces(MediaType.APPLICATION_JSON)
         List<Exercise> getExercisesByUser(
                 @Nonnull @PathParam("userId") Long userId, 
                 @Nullable @QueryParam("type") String type,
                 @Nullable @QueryParam("startTime") String startTime,
                 @Nullable @QueryParam("endTime") String endTime);
+        
+        @GET
+        @Path("/users/getrankings")
+        @Produces(MediaType.APPLICATION_JSON)
+        List<Long> getUserRankings();
         
         @PUT
         @Path("/create")

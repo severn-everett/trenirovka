@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.Query;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,8 +85,8 @@ public class ExerciseDaoImpl extends AbstractBaseDao<Exercise>implements Exercis
         try {
             return (Exercise) getEntityManager()
                     .createQuery(
-                            "SELECT e FROM Exercise e WHERE e.userId = :userId AND (e.startTime BETWEEN :startTime AND :endTime) "
-                                    + "OR (e.endTime BETWEEN :startTime AND :endTime)")
+                            "SELECT e FROM Exercise e WHERE e.userId = :userId AND e.startTime <= :endTime "
+                                    + "AND e.endTime >= :startTime")
                     .setParameter("userId", userId)
                     .setParameter("startTime", startTime)
                     .setParameter("endTime", endTime)
@@ -95,5 +96,19 @@ public class ExerciseDaoImpl extends AbstractBaseDao<Exercise>implements Exercis
         }
     }
         
-        
+    @Nonnull
+    @Override
+    public List<Exercise> findForLastMonth() {
+        Date now = new Date();
+        Date monthAgo = DateUtils.addWeeks(now, -4);
+        try {
+            return getEntityManager()
+                    .createQuery("SELECT e FROM Exercise e WHERE e.startTime BETWEEN :startTime AND :endTime ORDER BY e.startTime")
+                    .setParameter("startTime", monthAgo)
+                    .setParameter("endTime", now)
+                    .getResultList();
+        } catch (NoResultException e) {
+            return Collections.emptyList();
+        }
+    }
 }
