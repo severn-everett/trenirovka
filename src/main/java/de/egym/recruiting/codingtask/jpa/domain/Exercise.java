@@ -1,7 +1,5 @@
 package de.egym.recruiting.codingtask.jpa.domain;
 
-import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -10,7 +8,6 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import org.apache.commons.lang3.time.DateUtils;
 
 @Entity
 public class Exercise extends AbstractEntity {
@@ -22,7 +19,7 @@ public class Exercise extends AbstractEntity {
 	private Long userId;
 
         @NotNull
-        @Pattern(regexp = "^[A-Za-z0-9\\s]*$")
+        @Pattern(regexp = "^[A-Za-z0-9\\s]*$", message = "must be alphanumeric")
 	private String description;
         
 	@Enumerated(EnumType.STRING)
