@@ -1,4 +1,5 @@
 .gradle
+.nb-gradle
 /build/
 
 # Ignore Gradle GUI config
