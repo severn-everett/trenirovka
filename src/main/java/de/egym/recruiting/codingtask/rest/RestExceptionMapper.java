@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.egym.recruiting.codingtask.dto.ErrorDto;
+import de.egym.recruiting.codingtask.exceptions.AlreadyExistsException;
 
 /**
  * Maps Java exceptions to HTTP error responses.
@@ -32,12 +33,12 @@ public class RestExceptionMapper implements ExceptionMapper<Exception> {
 	public Response toResponse(final Exception ex) {
 		if (ex instanceof IllegalArgumentException) {
 			return errorResponse(Response.Status.BAD_REQUEST.getStatusCode(), "Malformed REST request. " + ex.getMessage());
-		}
-
-		if (ex instanceof WebApplicationException) {
+		} else if (ex instanceof WebApplicationException) {
 			final WebApplicationException waex = (WebApplicationException) ex;
 			return errorResponse(waex.getResponse().getStatus(), waex.getMessage());
-		}
+		} else if (ex instanceof AlreadyExistsException) {
+                        return errorResponse(Response.Status.CONFLICT.getStatusCode(), ex.getMessage());
+                }
 
 		log.error("Unexpected exception in REST interface.", ex);
 		return errorResponse(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Unexpected error in the REST interface.");

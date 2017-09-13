@@ -12,6 +12,8 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
+import java.util.Calendar;
+import java.util.Date;
 
 @Transactional
 public class ExerciseDaoImpl extends AbstractBaseDao<Exercise>implements ExerciseDao {
@@ -39,4 +41,23 @@ public class ExerciseDaoImpl extends AbstractBaseDao<Exercise>implements Exercis
 			return Collections.emptyList();
 		}
 	}
+
+    @Nullable
+    @Override
+    public Exercise findByUserIdAndTimeRange(Long userId, Date startTime, Date endTime) {
+        try {
+            return (Exercise) getEntityManager()
+                    .createQuery(
+                            "SELECT e FROM Exercise e WHERE e.userId = :userId AND (e.startTime BETWEEN :startTime AND :endTime) "
+                                    + "OR (e.endTime BETWEEN :startTime AND :endTime)")
+                    .setParameter("userId", userId)
+                    .setParameter("startTime", startTime)
+                    .setParameter("endTime", endTime)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+        
+        
 }

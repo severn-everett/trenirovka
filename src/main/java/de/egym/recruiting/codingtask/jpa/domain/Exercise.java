@@ -1,6 +1,7 @@
 package de.egym.recruiting.codingtask.jpa.domain;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -25,7 +26,7 @@ public class Exercise extends AbstractEntity {
         @NotNull
         @Pattern(regexp = "^[A-Za-z0-9\\s]*$")
 	private String description;
-
+        
 	@Enumerated(EnumType.STRING)
 	private Enums.ExerciseType type;
 
@@ -41,6 +42,11 @@ public class Exercise extends AbstractEntity {
         @NotNull
         @Min(value = 0)
 	private Integer duration;
+        
+        /**
+         * Aggregated from startTime + duration
+         */
+        private Date endTime;
 
 	/**
 	 * in meters
@@ -95,6 +101,14 @@ public class Exercise extends AbstractEntity {
 	public void setDuration(Integer duration) {
 		this.duration = duration;
 	}
+        
+        public void setEndTime(Date endTime) {
+                this.endTime = endTime;
+        }
+        
+        public Date getEndTime() {
+                return endTime;
+        }
 
 	public Integer getDistance() {
 		return distance;
@@ -112,7 +126,14 @@ public class Exercise extends AbstractEntity {
 		this.description = description;
 	}
         
-        public static Date parseDate (String dateTimeStr) throws ParseException {
+        public static Date parseDate(String dateTimeStr) throws ParseException {
             return DateUtils.parseDate(dateTimeStr, TIME_PATTERN);
+        }
+        
+        public static Date calculateEndTime(Date startTime, Integer duration) {            
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(startTime);
+            calendar.add(Calendar.SECOND, duration);
+            return calendar.getTime();
         }
 }

@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
+import java.util.Date;
 
 public interface ExerciseDao extends BaseDao<Exercise> {
 
@@ -18,4 +19,7 @@ public interface ExerciseDao extends BaseDao<Exercise> {
 	 */
 	@Nonnull
 	List<Exercise> findByDescription(@Nullable String description);
+        
+        @Nullable
+        Exercise findByUserIdAndTimeRange(@Nonnull Long userId, @Nonnull Date startTime, @Nonnull Date endTime);
 }

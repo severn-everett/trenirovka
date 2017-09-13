@@ -1,5 +1,6 @@
 package de.egym.recruiting.codingtask.rest;
 
+import de.egym.recruiting.codingtask.exceptions.AlreadyExistsException;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -73,5 +74,5 @@ public interface ExerciseService {
             @Nonnull @QueryParam("duration") Integer duration,
             @Nonnull @QueryParam("distance") Integer distance,
             @Nonnull @QueryParam("calories") Integer calories
-        );
+        ) throws AlreadyExistsException;
 }
