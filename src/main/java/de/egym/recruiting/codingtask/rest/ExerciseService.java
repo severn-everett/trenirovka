@@ -1,6 +1,7 @@
 package de.egym.recruiting.codingtask.rest;
 
 import de.egym.recruiting.codingtask.exceptions.AlreadyExistsException;
+import de.egym.recruiting.codingtask.jpa.domain.Enums;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
 import io.swagger.annotations.Api;
+import java.text.ParseException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -39,16 +41,7 @@ public interface ExerciseService {
         @Path("/{exerciseId}")
         @Nonnull
         @Produces(MediaType.APPLICATION_JSON)
-        Exercise updateExercise(
-            @Nonnull @PathParam("exerciseId") Long exerciseId,
-            @Nonnull @QueryParam("userId") Long userId,
-            @Nonnull @QueryParam("description") String description,
-            @Nonnull @QueryParam("type") String type,
-            @Nonnull @QueryParam("startTime") String startTime,
-            @Nonnull @QueryParam("duration") Integer duration,
-            @Nonnull @QueryParam("distance") Integer distance,
-            @Nonnull @QueryParam("calories") Integer calories
-        );
+        Exercise updateExercise(@Nonnull Exercise exercise);
         
         @DELETE
         @Path("/{exerciseId}")
@@ -71,28 +64,21 @@ public interface ExerciseService {
         @GET
         @Path("/users/viewuser/{userId}")
         @Produces(MediaType.APPLICATION_JSON)
-        List<Exercise> getExercisesByUser(
+        List<Exercise> getExercisesByUser (
                 @Nonnull @PathParam("userId") Long userId, 
-                @Nullable @QueryParam("type") String type,
-                @Nullable @QueryParam("startTime") String startTime,
-                @Nullable @QueryParam("endTime") String endTime);
+                @Nullable @QueryParam("type") Enums.ExerciseType type,
+                @Nullable @QueryParam("date") String date) throws ParseException;
         
         @GET
         @Path("/users/getrankings")
         @Produces(MediaType.APPLICATION_JSON)
-        List<Long> getUserRankings();
+        List<Long> getUserRankings(@Nonnull @QueryParam("userIds") List<Long> userIds);
         
         @PUT
         @Path("/create")
         @Nonnull
         @Produces(MediaType.APPLICATION_JSON)
         Exercise createExercise(
-            @Nonnull @QueryParam("userId") Long userId,
-            @Nonnull @QueryParam("description") String description,
-            @Nonnull @QueryParam("type") String type,
-            @Nonnull @QueryParam("startTime") String startTime,
-            @Nonnull @QueryParam("duration") Integer duration,
-            @Nonnull @QueryParam("distance") Integer distance,
-            @Nonnull @QueryParam("calories") Integer calories
-        ) throws AlreadyExistsException;
+            @Nonnull Exercise exercise 
+            ) throws AlreadyExistsException;
 }

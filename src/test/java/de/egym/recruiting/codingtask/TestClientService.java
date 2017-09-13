@@ -1,16 +1,17 @@
 package de.egym.recruiting.codingtask;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.inject.Inject;
+import de.egym.recruiting.codingtask.exceptions.AlreadyExistsException;
 
 import de.egym.recruiting.codingtask.jpa.domain.Enums;
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
 import de.egym.recruiting.codingtask.rest.ExerciseService;
+import java.text.ParseException;
 
 public class TestClientService {
 
@@ -59,9 +60,8 @@ public class TestClientService {
 	 *             if there is an error please throw an appropriate exception here
 	 */
 	@Nonnull
-	public Exercise createExercise(@Nullable final Exercise exercise) {
-		// TODO: please insert here your implementation
-		return null;
+	public Exercise createExercise(@Nullable final Exercise exercise) throws AlreadyExistsException {
+		return exerciseService.createExercise(exercise);
 	}
 
 	/**
@@ -75,8 +75,7 @@ public class TestClientService {
 	 */
 	@Nonnull
 	public Exercise updateExercise(@Nullable final Exercise exercise) {
-		// TODO: please insert here your implementation
-		return null;
+		return exerciseService.updateExercise(exercise);
 	}
 
 	/**
@@ -88,7 +87,7 @@ public class TestClientService {
 	 *             if there is an error please throw an appropriate exception here
 	 */
 	public void deleteExercise(@Nullable final Long exerciseId) {
-		// TODO: please insert here your implementation
+            exerciseService.deleteExercise(exerciseId);
 	}
 
 	/**
@@ -106,9 +105,8 @@ public class TestClientService {
 	 */
 	@Nonnull
 	public List<Exercise> getExercises(@Nullable final Long userId, @Nullable final Enums.ExerciseType exerciseType,
-			@Nullable final String date) {
-		// TODO: please insert here your implementation
-		return Collections.emptyList();
+			@Nullable final String date) throws ParseException {
+            return exerciseService.getExercisesByUser(userId, exerciseType, date);
 	}
 
 	/**
@@ -123,7 +121,6 @@ public class TestClientService {
 	 */
 	@Nonnull
 	public List<Long> getRanking(@Nullable final List<Long> userIds) {
-		// TODO: please insert here your implementation
-		return Collections.emptyList();
+		return exerciseService.getUserRankings(userIds);
 	}
 }

@@ -5,15 +5,16 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.inject.Inject;
 
 import de.egym.recruiting.codingtask.AbstractIntegrationTest;
 import de.egym.recruiting.codingtask.TestClientService;
+import de.egym.recruiting.codingtask.exceptions.AlreadyExistsException;
 import de.egym.recruiting.codingtask.jpa.domain.Enums;
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
+import java.text.ParseException;
 
 public class ExerciseBasicTest extends AbstractIntegrationTest {
 
@@ -21,14 +22,12 @@ public class ExerciseBasicTest extends AbstractIntegrationTest {
 	private TestClientService testClientService;
 
 	@Test(expected = RuntimeException.class)
-        @Ignore
 	public void testNotValidExerciseId() {
 		testClientService.getExercise(-1L);
 	}
 
 	@Test
-	@Ignore
-	public void testInsert() {
+	public void testInsert() throws AlreadyExistsException {
 		final long userId = 10L;
 		final String date = "2016-06-01T14:23:35";
 
@@ -65,8 +64,7 @@ public class ExerciseBasicTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	@Ignore
-	public void testUpdate() {
+	public void testUpdate() throws AlreadyExistsException {
 		final long userId = 11L;
 		final String date = "2016-06-02T17:03:15";
 
@@ -117,8 +115,7 @@ public class ExerciseBasicTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	@Ignore
-	public void testDelete() {
+	public void testDelete() throws AlreadyExistsException {
 		final long userId = 12L;
 		final String date = "2016-06-15T12:00:00";
 
@@ -145,8 +142,7 @@ public class ExerciseBasicTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	@Ignore
-	public void testSelectByDescription() {
+	public void testSelectByDescription() throws AlreadyExistsException {
 		final long userId = 13L;
 		final String date = "2016-06-01T14:23:35";
 
@@ -171,8 +167,7 @@ public class ExerciseBasicTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	@Ignore
-	public void testSelectByTypeAndDate() {
+	public void testSelectByTypeAndDate() throws AlreadyExistsException, ParseException {
 		final long userId = 14L;
 		final String date = "2016-06-19T11:00:00";
 

@@ -1,5 +1,6 @@
 package de.egym.recruiting.codingtask.jpa.dao;
 
+import de.egym.recruiting.codingtask.jpa.domain.Enums;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -21,11 +22,11 @@ public interface ExerciseDao extends BaseDao<Exercise> {
 	List<Exercise> findByDescription(@Nullable String description);
         
         @Nonnull
-        List<Exercise> findByUserAndTypeAndDates(@Nonnull Long userId, @Nullable String type, @Nullable String startTime, @Nullable String endTime);
+        List<Exercise> findByUserAndTypeAndDate(@Nonnull Long userId, @Nullable Enums.ExerciseType type, @Nullable Date date);
         
         @Nullable
         Exercise findByUserIdAndTimeRange(@Nonnull Long userId, @Nonnull Date startTime, @Nonnull Date endTime);
         
         @Nonnull
-        List<Exercise> findForLastMonth();
+        List<Exercise> findForLastMonth(@Nonnull List<Long> userIds);
 }

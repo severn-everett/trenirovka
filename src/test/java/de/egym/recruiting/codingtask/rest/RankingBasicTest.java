@@ -14,6 +14,7 @@ import com.google.inject.Inject;
 
 import de.egym.recruiting.codingtask.AbstractIntegrationTest;
 import de.egym.recruiting.codingtask.TestClientService;
+import de.egym.recruiting.codingtask.exceptions.AlreadyExistsException;
 import de.egym.recruiting.codingtask.jpa.domain.Enums;
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
 
@@ -24,7 +25,7 @@ public class RankingBasicTest extends AbstractIntegrationTest {
 
 	@Test
 	@Ignore
-	public void testRangingList() {
+	public void testRangingList() throws AlreadyExistsException {
 		final long userId1 = 20L;
 		final long userId2 = 21L;
 
