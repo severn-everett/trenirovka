@@ -14,17 +14,25 @@ import com.google.inject.Singleton;
 import de.egym.recruiting.codingtask.jpa.dao.ExerciseDao;
 import de.egym.recruiting.codingtask.jpa.domain.Enums;
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
+import java.text.ParseException;
+import java.util.stream.Collectors;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 
 @Singleton
 public class ExerciseServiceImpl implements ExerciseService {
 
     private static final Logger log = LoggerFactory.getLogger(ExerciseServiceImpl.class);
-
+    
     private final ExerciseDao exerciseDao;
+    
+    private final Validator validator;
 
     @Inject
     ExerciseServiceImpl(final ExerciseDao exerciseDao) {
         this.exerciseDao = exerciseDao;
+        validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
     @Nonnull
@@ -76,21 +84,50 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
     
     private void populateExercise(
-        final Exercise exercise,
-        final Long userId,
-        final String description,
-        final String type,
-        final String startTime,
-        final Integer duration,
-        final Integer distance,
-        final Integer calories
+        Exercise exercise,
+        Long userId,
+        String description,
+        String type,
+        String startTime,
+        Integer duration,
+        Integer distance,
+        Integer calories
     ){
-        exercise.setUserId(userId);
-        exercise.setDescription(description);
-        exercise.setType(Enums.ExerciseType.valueOf(type));
-        //exercise.setUserId(userId);
-        exercise.setDuration(duration);
-        exercise.setDistance(distance);
-        exercise.setCalories(calories);
+        if ((userId != null) &&
+            (description != null) &&
+            (type != null) &&
+            (startTime != null) &&
+            (duration != null) &&
+            (distance != null) &&
+            (calories != null)) {
+            try {
+                exercise.setUserId(userId);
+                exercise.setDescription(description);
+                exercise.setType(Enums.ExerciseType.valueOf(type));
+                exercise.setStartTime(Exercise.parseDate(startTime));
+                exercise.setDuration(duration);
+                exercise.setDistance(distance);
+                exercise.setCalories(calories);
+                String validationErrors = validator.validate(exercise)
+                        .stream()
+                        .map(constraintViolation -> {
+                            return String.format("'%s' value '%s' %s",
+                                    constraintViolation.getPropertyPath(),
+                                    constraintViolation.getInvalidValue(),
+                                    constraintViolation.getMessage());
+                         })
+                        .collect(Collectors.joining("; "));
+                if (!validationErrors.isEmpty()) {
+                    log.error("Validation errors: " + validationErrors);
+                    throw new IllegalArgumentException(validationErrors);
+                }
+            } catch (ParseException ex) {
+                log.error("Invalid StartTime format provided.");
+                throw new IllegalArgumentException(ex.getMessage(), ex);
+            }
+        } else {
+            log.error("At least one provided Exercise parameter is null.");
+            throw new IllegalArgumentException("'userId', 'description', 'type', 'startTime', 'duration', 'distance', and 'calories' must not be null.");
+        }
     }
 }

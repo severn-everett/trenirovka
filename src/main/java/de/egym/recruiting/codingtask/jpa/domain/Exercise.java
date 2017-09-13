@@ -6,6 +6,9 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import org.apache.commons.lang3.time.DateUtils;
 
 @Entity
@@ -14,9 +17,13 @@ public class Exercise extends AbstractEntity {
         private static final String TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
 	private static final long serialVersionUID = 1L;
-
+        
+        @NotNull
+        @Min(value = 0)
 	private Long userId;
 
+        @NotNull
+        @Pattern(regexp = "^[A-Za-z0-9\\s]*$")
 	private String description;
 
 	@Enumerated(EnumType.STRING)
@@ -25,21 +32,28 @@ public class Exercise extends AbstractEntity {
 	/**
 	 * format: yyyy-MM-dd'T'HH:mm:ss
 	 */
+        @NotNull
 	private Date startTime;
 
 	/**
 	 * in seconds
 	 */
+        @NotNull
+        @Min(value = 0)
 	private Integer duration;
 
 	/**
 	 * in meters
 	 */
+        @NotNull
+        @Min(value = 0)
 	private Integer distance;
 
 	/**
 	 * in kcal
 	 */
+        @NotNull
+        @Min(value = 0)
 	private Integer calories;
 
 	public Integer getCalories() {

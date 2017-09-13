@@ -21,6 +21,7 @@ public class ExerciseBasicTest extends AbstractIntegrationTest {
 	private TestClientService testClientService;
 
 	@Test(expected = RuntimeException.class)
+        @Ignore
 	public void testNotValidExerciseId() {
 		testClientService.getExercise(-1L);
 	}

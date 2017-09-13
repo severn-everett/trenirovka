@@ -44,6 +44,7 @@ public class TestData {
 		exercise11.setType(Enums.ExerciseType.CIRCUIT_TRAINING);
 		exercise11.setDuration(1800);
 		exercise11.setCalories(220);
+                exercise11.setDistance(50000);
 		exercise11.setUserId(userId1);
 		try {
 			exercise11.setStartTime(Exercise.parseDate("2016-06-02T14:23:35"));
