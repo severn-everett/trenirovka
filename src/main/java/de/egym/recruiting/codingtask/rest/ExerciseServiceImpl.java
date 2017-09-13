@@ -73,6 +73,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         return exerciseDao.findByDescription(description);
     }
 
+    @Nonnull
     @Override
     public Exercise createExercise(
         @Nonnull final Long userId,
@@ -92,6 +93,24 @@ public class ExerciseServiceImpl implements ExerciseService {
         } else {
             throw new AlreadyExistsException(userId, newExercise.getStartTime(), newExercise.getEndTime(), newExercise.getDescription());
         }
+    }
+    
+    @Nonnull
+    @Override
+    public List<Exercise> getExercisesByUser(
+        @Nonnull final Long userId,
+        final String type,
+        final String startTime,
+        final String endTime) {
+        log.debug("Get exercises by user, type, and dates");
+        return exerciseDao.findByUserAndTypeAndDates(userId, type, startTime, endTime);
+    }
+    
+    @Nonnull
+    @Override
+    public void deleteExercise(@Nonnull final Long exerciseId) {
+        log.debug("Delete exercise.");
+        exerciseDao.deleteById(exerciseId);
     }
     
     private void validateNotNull (

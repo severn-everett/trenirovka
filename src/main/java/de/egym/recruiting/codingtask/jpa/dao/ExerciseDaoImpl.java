@@ -11,12 +11,20 @@ import javax.persistence.NoResultException;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
+import de.egym.recruiting.codingtask.jpa.domain.Enums;
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
-import java.util.Calendar;
+import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import javax.persistence.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Transactional
 public class ExerciseDaoImpl extends AbstractBaseDao<Exercise>implements ExerciseDao {
+    
+    private static final Logger log = LoggerFactory.getLogger(ExerciseDaoImpl.class);
 
 	@Inject
 	ExerciseDaoImpl(final Provider<EntityManager> entityManagerProvider) {
@@ -40,7 +48,35 @@ public class ExerciseDaoImpl extends AbstractBaseDao<Exercise>implements Exercis
 		} catch (NoResultException e) {
 			return Collections.emptyList();
 		}
-	}
+	}   
+
+    @Override
+    public List<Exercise> findByUserAndTypeAndDates(Long userId, String type, String startTime, String endTime) {
+        StringBuilder queryBuilder = new StringBuilder("SELECT e FROM Exercise e WHERE e.userId = :userId");
+        Map<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("userId", userId);
+        if (type != null) {
+            queryBuilder.append(" AND e.type = :parsedType");
+            paramsMap.put("parsedType", Enums.ExerciseType.valueOf(type));
+        }
+        if ((startTime != null) && (endTime != null)) {
+            queryBuilder.append(" AND (e.startTime BETWEEN :startTime AND :endTime) OR (e.endTime BETWEEN :startTime AND :endTime)");
+            try {
+                paramsMap.put("startTime", Exercise.parseDate(startTime));
+                paramsMap.put("endTime", Exercise.parseDate(endTime));
+            } catch (ParseException ex) {
+                log.error("Invalid StartTime format provided.");
+                throw new IllegalArgumentException(ex.getMessage(), ex);
+            }
+        }
+        final Query query = getEntityManager().createQuery(queryBuilder.toString());
+        paramsMap.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return Collections.emptyList();
+        }
+    }
 
     @Nullable
     @Override

@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
 import io.swagger.annotations.Api;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 
@@ -49,6 +50,11 @@ public interface ExerciseService {
             @Nonnull @QueryParam("calories") Integer calories
         );
         
+        @DELETE
+        @Path("/{exerciseId}")
+        @Produces(MediaType.APPLICATION_JSON)
+        void deleteExercise(@Nonnull @PathParam("exerciseId") Long exerciseId);
+        
 	/**
 	 * Get the exercises with the given description.
 	 *
@@ -61,6 +67,15 @@ public interface ExerciseService {
 	@Nonnull
 	@Produces(MediaType.APPLICATION_JSON)
 	List<Exercise> getExerciseByDescription(@Nullable @QueryParam("description") String description);
+        
+        @GET
+        @Path("/users/{userId}")
+        @Produces(MediaType.APPLICATION_JSON)
+        List<Exercise> getExercisesByUser(
+                @Nonnull @PathParam("userId") Long userId, 
+                @Nullable @QueryParam("type") String type,
+                @Nullable @QueryParam("startTime") String startTime,
+                @Nullable @QueryParam("endTime") String endTime);
         
         @PUT
         @Path("/create")

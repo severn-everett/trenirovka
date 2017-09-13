@@ -20,6 +20,9 @@ public interface ExerciseDao extends BaseDao<Exercise> {
 	@Nonnull
 	List<Exercise> findByDescription(@Nullable String description);
         
+        @Nonnull
+        List<Exercise> findByUserAndTypeAndDates(@Nonnull Long userId, @Nullable String type, @Nullable String startTime, @Nullable String endTime);
+        
         @Nullable
         Exercise findByUserIdAndTimeRange(@Nonnull Long userId, @Nonnull Date startTime, @Nonnull Date endTime);
 }
