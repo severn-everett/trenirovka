@@ -1,0 +1,46 @@
+package de.egym.recruiting.codingtask.rest;
+
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import de.egym.recruiting.codingtask.jpa.domain.Exercise;
+import io.swagger.annotations.Api;
+
+@Path("/api/v1/exercise")
+@Api(value = "Exercise Service")
+public interface ExerciseService {
+
+	/**
+	 * Get the exercise for a given exerciseId.
+	 *
+	 * @param exerciseId
+	 *            id to search
+	 * @return the exercise for the given exerciseId
+	 */
+	@GET
+	@Path("/{exerciseId}")
+	@Nonnull
+	@Produces(MediaType.APPLICATION_JSON)
+	Exercise getExerciseById(@Nonnull @PathParam("exerciseId") Long exerciseId);
+
+	/**
+	 * Get the exercises with the given description.
+	 *
+	 * @param description
+	 *            description to search
+	 * @return the exercises for the given description
+	 */
+	@GET
+	@Path("/")
+	@Nonnull
+	@Produces(MediaType.APPLICATION_JSON)
+	List<Exercise> getExerciseByDescription(@Nullable @QueryParam("description") String description);
+}
