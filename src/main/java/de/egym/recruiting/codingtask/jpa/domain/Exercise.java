@@ -1,5 +1,7 @@
 package de.egym.recruiting.codingtask.jpa.domain;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -11,6 +13,12 @@ import javax.validation.constraints.Pattern;
 
 @Entity
 public class Exercise extends AbstractEntity {
+    
+        public static final String TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
+        private static final SimpleDateFormat FORMATTER = new SimpleDateFormat(TIME_PATTERN);
+        static {
+            FORMATTER.setLenient(false);
+        }
 
 	private static final long serialVersionUID = 1L;
         
@@ -22,6 +30,7 @@ public class Exercise extends AbstractEntity {
         @Pattern(regexp = "^[A-Za-z0-9\\s]*$", message = "must be alphanumeric")
 	private String description;
         
+        @NotNull
 	@Enumerated(EnumType.STRING)
 	private Enums.ExerciseType type;
 
@@ -107,4 +116,8 @@ public class Exercise extends AbstractEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+        
+        public static final Date parseDate(String rawDate) throws ParseException {
+            return FORMATTER.parse(rawDate);
+        }
 }

@@ -12,8 +12,6 @@ import com.google.inject.persist.Transactional;
 import de.egym.recruiting.codingtask.jpa.dao.ExerciseDao;
 import de.egym.recruiting.codingtask.jpa.domain.Enums;
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
-import java.util.Date;
-import org.apache.commons.lang3.time.DateUtils;
 
 @Transactional
 public class TestData {
@@ -21,8 +19,6 @@ public class TestData {
 	private static final Logger log = LoggerFactory.getLogger(TestData.class);
 
 	private final ExerciseDao exerciseDao;
-        
-        private static final String TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
 	@Inject
 	public TestData(final ExerciseDao exerciseDao) {
@@ -51,7 +47,7 @@ public class TestData {
                 exercise11.setDistance(50000);
 		exercise11.setUserId(userId1);
 		try {
-			exercise11.setStartTime(DateUtils.parseDate("2017-09-02T14:23:35", TIME_PATTERN));
+			exercise11.setStartTime(Exercise.parseDate("2017-09-02T14:23:35"));
 		} catch (ParseException e) {
 			// ignoring
 		}
@@ -65,7 +61,7 @@ public class TestData {
 		exercise12.setDistance(280000);
 		exercise12.setUserId(userId1);
 		try {
-			exercise12.setStartTime(DateUtils.parseDate("2017-09-11T16:33:45", TIME_PATTERN));
+			exercise12.setStartTime(Exercise.parseDate("2017-09-11T16:33:45"));
 		} catch (ParseException e) {
 			// ignoring
 		}
@@ -81,7 +77,7 @@ public class TestData {
 		exercise21.setDistance(92000);
 		exercise21.setUserId(userId2);
 		try {
-			exercise21.setStartTime(DateUtils.parseDate("2017-09-12T19:13:07", TIME_PATTERN));
+			exercise21.setStartTime(Exercise.parseDate("2017-09-12T19:13:07"));
 		} catch (ParseException e) {
 			// ignoring
 		}
