@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.inject.Inject;
@@ -17,6 +16,8 @@ import de.egym.recruiting.codingtask.TestClientService;
 import de.egym.recruiting.codingtask.exceptions.AlreadyExistsException;
 import de.egym.recruiting.codingtask.jpa.domain.Enums;
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
+import org.apache.commons.lang3.time.DateUtils;
+import org.junit.Ignore;
 
 public class RankingBasicTest extends AbstractIntegrationTest {
 
@@ -24,7 +25,6 @@ public class RankingBasicTest extends AbstractIntegrationTest {
 	private TestClientService testClientService;
 
 	@Test
-	@Ignore
 	public void testRangingList() throws AlreadyExistsException {
 		final long userId1 = 20L;
 		final long userId2 = 21L;
@@ -58,8 +58,32 @@ public class RankingBasicTest extends AbstractIntegrationTest {
 		final List<Long> ranking = testClientService.getRanking(Arrays.asList(userId1, userId2));
 		assertNotNull(ranking);
 		assertThat(ranking.size(), is(2));
-		assertThat(ranking.get(0), is(userId2));
-		assertThat(ranking.get(1), is(userId1));
+		assertThat(ranking.get(0), is(userId1));
+		assertThat(ranking.get(1), is(userId2));
 	}
 
+        @Test
+	public void testComplexRangeList() throws AlreadyExistsException {
+		final long userId1 = 20L;
+		final long userId2 = 21L;
+                
+		final Exercise exercise3ToInsert = new Exercise();
+		exercise3ToInsert.setDescription("Onsite Interview");
+		exercise3ToInsert.setDuration(6400);
+		exercise3ToInsert.setDistance(1500);
+		exercise3ToInsert.setCalories(600);
+		exercise3ToInsert.setStartTime(DateUtils.addDays(Calendar.getInstance().getTime(), -1));
+		exercise3ToInsert.setType(Enums.ExerciseType.OTHER);
+		exercise3ToInsert.setUserId(userId2);
+                
+		final Exercise persistedExercise3 = testClientService.createExercise(exercise3ToInsert);
+		assertNotNull(persistedExercise3);
+		assertNotNull(persistedExercise3.getId());
+
+		final List<Long> ranking = testClientService.getRanking(Arrays.asList(userId1, userId2));
+		assertNotNull(ranking);
+		assertThat(ranking.size(), is(2));
+		assertThat(ranking.get(0), is(userId1));
+		assertThat(ranking.get(1), is(userId2));
+	}
 }

@@ -37,12 +37,23 @@ public interface ExerciseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	Exercise getExerciseById(@Nonnull @PathParam("exerciseId") Long exerciseId);
         
+        /**
+         * Update an exercise.
+         * @param exercise
+         *              the exercise to be updated
+         * @return the updated exercise
+         */
         @POST
         @Path("/{exerciseId}")
         @Nonnull
         @Produces(MediaType.APPLICATION_JSON)
         Exercise updateExercise(@Nonnull Exercise exercise);
         
+        /**
+         * Delete an exercise for a given exerciseId.
+         * @param exerciseId
+         *              id to search
+         */
         @DELETE
         @Path("/{exerciseId}")
         @Produces(MediaType.APPLICATION_JSON)
@@ -61,6 +72,13 @@ public interface ExerciseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	List<Exercise> getExerciseByDescription(@Nullable @QueryParam("description") String description);
         
+        /**
+         * Create an exercise
+         * @param exercise
+         *              the exercise to be created
+         * @return the created exercise
+         * @throws AlreadyExistsException 
+         */
         @PUT
         @Path("/")
         @Nonnull
@@ -69,6 +87,17 @@ public interface ExerciseService {
             @Nonnull Exercise exercise 
             ) throws AlreadyExistsException;
         
+        /**
+         * Find all exercises for a user and optional search parameters.
+         * @param userId
+         *              the user's id
+         * @param type
+         *              (Optional) the type of exercises to list
+         * @param date
+         *              (Optional) the date in which to search
+         * @return a list of the exercises
+         * @throws ParseException 
+         */
         @GET
         @Path("/users/viewexercises")
         @Produces(MediaType.APPLICATION_JSON)
@@ -77,6 +106,12 @@ public interface ExerciseService {
                 @Nullable @QueryParam("type") Enums.ExerciseType type,
                 @Nullable @QueryParam("date") String date) throws ParseException;
         
+        /**
+         * Get a ranking of users by the points of their exercises completed in the past month.
+         * @param userIds
+         *              the list of users to rank
+         * @return the list of user ids in descending order
+         */
         @GET
         @Path("/users/getrankings")
         @Produces(MediaType.APPLICATION_JSON)

@@ -15,6 +15,7 @@ import de.egym.recruiting.codingtask.exceptions.AlreadyExistsException;
 import de.egym.recruiting.codingtask.jpa.domain.Enums;
 import de.egym.recruiting.codingtask.jpa.domain.Exercise;
 import java.text.ParseException;
+import javax.ws.rs.NotFoundException;
 
 public class ExerciseBasicTest extends AbstractIntegrationTest {
 
@@ -61,6 +62,37 @@ public class ExerciseBasicTest extends AbstractIntegrationTest {
 		assertThat(selectedExercise.getDistance(), is(0));
 		assertThat(selectedExercise.getUserId(), is(userId));
 		assertDate(selectedExercise.getStartTime(), convertDate(date));
+	}
+        
+        @Test
+	public void testBadInsert() throws AlreadyExistsException {
+		final long userId = 10L;
+		final String date = "2016-06-01T14:23:35";
+
+		final Exercise blankExercise = new Exercise();
+
+		try {
+                    testClientService.createExercise(blankExercise);
+                    fail("'testClientService.createExercise(blankExercise)' should have thrown an exception.");
+                } catch (RuntimeException e) {
+                    assertEquals(IllegalArgumentException.class, e.getClass());
+                }
+
+		final Exercise badExercise = new Exercise();
+		badExercise.setDescription("Bad Values!");
+		badExercise.setDuration(-5);
+		badExercise.setDistance(-5);
+		badExercise.setCalories(-5);
+		badExercise.setStartTime(convertDate(date));
+		badExercise.setType(Enums.ExerciseType.OTHER);
+		badExercise.setUserId(userId);
+                
+                try {
+                    testClientService.createExercise(badExercise);
+                    fail("'testClientService.createExercise(badExercise)' should have thrown an exception.");
+                } catch (RuntimeException e) {
+                    assertEquals(IllegalArgumentException.class, e.getClass());
+                }
 	}
 
 	@Test
@@ -113,6 +145,29 @@ public class ExerciseBasicTest extends AbstractIntegrationTest {
 		assertThat(selectedExercise.getUserId(), is(userId));
 		assertDate(selectedExercise.getStartTime(), convertDate(date));
 	}
+        
+        @Test
+	public void testInvalidUpdate() throws AlreadyExistsException {
+		final long userId = 11L;
+		final String date = "2016-06-02T17:03:15";
+
+		final Exercise exerciseToUpdate = new Exercise();
+		exerciseToUpdate.setId(1000L);
+		exerciseToUpdate.setDescription("Onsite Interview");
+		exerciseToUpdate.setDuration(7200);
+		exerciseToUpdate.setDistance(1500);
+		exerciseToUpdate.setCalories(700);
+		exerciseToUpdate.setStartTime(convertDate(date));
+		exerciseToUpdate.setType(Enums.ExerciseType.OTHER);
+		exerciseToUpdate.setUserId(userId);
+                
+                try {
+                    final Exercise updatedExercise = testClientService.updateExercise(exerciseToUpdate);
+                    fail("'testClientService.updateExercise(exerciseToUpdate)' should have thrown an exception.");
+                } catch (RuntimeException e) {
+                    assertEquals(NotFoundException.class, e.getClass());
+                }
+	}
 
 	@Test
 	public void testDelete() throws AlreadyExistsException {
@@ -138,6 +193,7 @@ public class ExerciseBasicTest extends AbstractIntegrationTest {
 			testClientService.getExercise(persistedExercise.getId());
 			fail("'testClientService.getExercise(persistedExercise.getId())' should have thrown an exception.");
 		} catch (RuntimeException e) {
+                    assertEquals(NotFoundException.class, e.getClass());
 		}
 	}
 

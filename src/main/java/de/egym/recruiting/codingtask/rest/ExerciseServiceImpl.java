@@ -75,11 +75,11 @@ public class ExerciseServiceImpl implements ExerciseService {
     ) throws AlreadyExistsException {
         log.debug("Create exercise.");
         validateExercise(exercise);
-        Date endTime = DateUtils.addMinutes(exercise.getStartTime(), exercise.getDuration());
+        Date endTime = DateUtils.addSeconds(exercise.getStartTime(), exercise.getDuration());
         if (exerciseDao.findByUserIdAndTimeRange(exercise.getUserId(), exercise.getStartTime(), endTime) == null) {
             return exerciseDao.create(exercise);
         } else {
-            throw new AlreadyExistsException(exercise.getUserId(), exercise.getStartTime(), DateUtils.addMinutes(exercise.getStartTime(), exercise.getDuration()), exercise.getDescription());
+            throw new AlreadyExistsException(exercise.getUserId(), exercise.getStartTime(), DateUtils.addSeconds(exercise.getStartTime(), exercise.getDuration()), exercise.getDescription());
         }
     }
     

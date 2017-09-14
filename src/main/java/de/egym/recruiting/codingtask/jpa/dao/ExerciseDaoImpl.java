@@ -88,7 +88,7 @@ public class ExerciseDaoImpl extends AbstractBaseDao<Exercise>implements Exercis
                     .setParameter("userId", userId)
                     .getResultList();
             return exercises.stream().filter(exercise -> {
-                Date exerciseEndTime = DateUtils.addMinutes(exercise.getStartTime(), exercise.getDuration());
+                Date exerciseEndTime = DateUtils.addSeconds(exercise.getStartTime(), exercise.getDuration());
                 return ((exercise.getStartTime().compareTo(endTime) <= 0) && (exerciseEndTime.compareTo(startTime) >= 0));
             }).findFirst().orElse(null);
         } catch (NoResultException e) {

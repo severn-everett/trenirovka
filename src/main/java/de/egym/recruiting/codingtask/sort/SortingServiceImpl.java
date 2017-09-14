@@ -8,8 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SortingServiceImpl implements SortingService {
+    
+    private static final Logger log = LoggerFactory.getLogger(SortingServiceImpl.class);
     
     private static final Map<Enums.ExerciseType, Double> TYPE_MULTIPLIERS = ImmutableMap.<Enums.ExerciseType, Double>builder()
                                                                                 .put(Enums.ExerciseType.RUNNING, 2.0)
@@ -52,6 +56,7 @@ public class SortingServiceImpl implements SortingService {
             
             // Add the current score to the cumulative score
             double cumulativeScore = userPointsMap.getOrDefault(userId, 0.0);
+            log.debug(String.format("Adding %s to %s for user %s", exerciseScore, cumulativeScore, userId));
             userPointsMap.put(userId, cumulativeScore + exerciseScore);
         });
         return userPointsMap.entrySet()
