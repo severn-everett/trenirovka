@@ -36,7 +36,7 @@ public class SortingServiceImpl implements SortingService {
             Long userId = exercise.getUserId();
             double exerciseScore = 0.0;
             exerciseScore += exercise.getCalories().doubleValue();
-            exerciseScore += exercise.getDuration().doubleValue();
+            exerciseScore += (exercise.getDuration().doubleValue() / 60.0);
             
             Enums.ExerciseType type = exercise.getType();
             exerciseScore *= TYPE_MULTIPLIERS.get(type);

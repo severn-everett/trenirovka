@@ -58,8 +58,8 @@ public class RankingBasicTest extends AbstractIntegrationTest {
 		final List<Long> ranking = testClientService.getRanking(Arrays.asList(userId1, userId2));
 		assertNotNull(ranking);
 		assertThat(ranking.size(), is(2));
-		assertThat(ranking.get(0), is(userId1));
-		assertThat(ranking.get(1), is(userId2));
+		assertThat(ranking.get(0), is(userId2));
+		assertThat(ranking.get(1), is(userId1));
 	}
 
         @Test
@@ -68,13 +68,13 @@ public class RankingBasicTest extends AbstractIntegrationTest {
 		final long userId2 = 21L;
                 
 		final Exercise exercise3ToInsert = new Exercise();
-		exercise3ToInsert.setDescription("Onsite Interview");
-		exercise3ToInsert.setDuration(6400);
-		exercise3ToInsert.setDistance(1500);
-		exercise3ToInsert.setCalories(600);
+		exercise3ToInsert.setDescription("Code Example");
+		exercise3ToInsert.setDuration(80);
+		exercise3ToInsert.setDistance(15);
+		exercise3ToInsert.setCalories(60);
 		exercise3ToInsert.setStartTime(DateUtils.addDays(Calendar.getInstance().getTime(), -1));
 		exercise3ToInsert.setType(Enums.ExerciseType.OTHER);
-		exercise3ToInsert.setUserId(userId2);
+		exercise3ToInsert.setUserId(userId1);
                 
 		final Exercise persistedExercise3 = testClientService.createExercise(exercise3ToInsert);
 		assertNotNull(persistedExercise3);
@@ -83,7 +83,7 @@ public class RankingBasicTest extends AbstractIntegrationTest {
 		final List<Long> ranking = testClientService.getRanking(Arrays.asList(userId1, userId2));
 		assertNotNull(ranking);
 		assertThat(ranking.size(), is(2));
-		assertThat(ranking.get(0), is(userId1));
-		assertThat(ranking.get(1), is(userId2));
+		assertThat(ranking.get(0), is(userId2));
+		assertThat(ranking.get(1), is(userId1));
 	}
 }
